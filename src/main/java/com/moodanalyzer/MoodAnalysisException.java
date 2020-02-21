@@ -7,7 +7,7 @@ public class MoodAnalysisException extends RuntimeException {
 
     public enum ExceptionType
     {
-        ENTERED_NULL,ENTERED_EMPTY;
+        ENTERED_NULL,ENTERED_EMPTY,CLASS_NOT_FOUND,NO_SUCH_METHOD;
     }
     public MoodAnalysisException(String message,ExceptionType type) {
         this.message=message;
