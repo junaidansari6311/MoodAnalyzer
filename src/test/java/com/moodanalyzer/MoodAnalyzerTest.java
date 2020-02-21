@@ -3,9 +3,6 @@ package com.moodanalyzer;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 public class MoodAnalyzerTest {
 
     @Test
@@ -79,6 +76,24 @@ public class MoodAnalyzerTest {
             MoodAnalyzerFactory.createMoodAnalyzer("No such method found", "com.moodanalyzer.MoodAnalyzer",Integer.class);
         }catch (MoodAnalysisException e){
             Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_METHOD, e.type);
+        }
+    }
+
+    @Test
+    public void givenMessageUsingReflection_WhenProper_ShouldReturnHappy() {
+        MoodAnalyzer moodAnalyzer = MoodAnalyzerFactory.createMoodAnalyzer("I'm in Happy Mood", "com.moodanalyzer.MoodAnalyzer", String.class);
+        String mood = MoodAnalyzerFactory.methodInvocation( "analyseMood",moodAnalyzer);
+        Assert.assertEquals("Happy", mood);
+    }
+
+    @Test
+    public void givenMessageUsingReflection_WhenImproper_ShouldReturnException() {
+        try {
+            MoodAnalyzer moodAnalyzer = MoodAnalyzerFactory.createMoodAnalyzer("I'm in Happy Mood", "com.moodanalyzer.MoodAnalyzer", String.class);
+            String mood = MoodAnalyzerFactory.methodInvocation("analyzeMoo", moodAnalyzer);
+            Assert.assertEquals("Happy", mood);
+        }catch (MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_METHOD,e.type);
         }
     }
 }

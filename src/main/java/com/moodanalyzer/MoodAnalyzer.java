@@ -6,6 +6,7 @@ public class MoodAnalyzer {
     public MoodAnalyzer() {
         message="Default";
     }
+
     public MoodAnalyzer(String message) {
         this.message=message;
     }
