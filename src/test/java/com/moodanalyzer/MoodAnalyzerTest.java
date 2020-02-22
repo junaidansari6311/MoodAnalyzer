@@ -15,7 +15,6 @@ public class MoodAnalyzerTest {
         } catch (MoodAnalysisException e) {
             e.printStackTrace();
         }
-
     }
 
     @Test
@@ -38,7 +37,6 @@ public class MoodAnalyzerTest {
         } catch (MoodAnalysisException e) {
             Assert.assertEquals(MoodAnalysisException.ExceptionType.ENTERED_NULL,e.type);
         }
-
     }
 
     @Test
@@ -62,6 +60,7 @@ public class MoodAnalyzerTest {
         MoodAnalyzer moodAnalyzer = MoodAnalyzerFactory.createMoodAnalyzer();
         Assert.assertEquals(new MoodAnalyzer(),moodAnalyzer);
     }
+
     @Test
     public void givenMood_WhenClassNameIncorrect_ShouldReturnException() {
         try {
@@ -70,6 +69,7 @@ public class MoodAnalyzerTest {
             Assert.assertEquals(MoodAnalysisException.ExceptionType.CLASS_NOT_FOUND, e.type);
         }
     }
+
     @Test
     public void givenMood_WhenConstructorParameterIsWrong_ShouldReturnException() {
         try {
@@ -95,5 +95,33 @@ public class MoodAnalyzerTest {
         }catch (MoodAnalysisException e) {
             Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_METHOD,e.type);
         }
+    }
+
+    @Test
+    public void givenFieldName_WhenProper_ShouldReturnHappy() {
+        MoodAnalyzer moodAnalyzer = MoodAnalyzerFactory.createMoodAnalyzer("", "com.moodanalyzer.MoodAnalyzer", String.class);
+        String mood = MoodAnalyzerFactory.settingField(moodAnalyzer,"message","I'm in Happy mood");
+        Assert.assertEquals("Happy",mood);
+    }
+    @Test
+    public void givenFieldName_WhenImProper_ShouldReturnException() {
+        try {
+            MoodAnalyzer moodAnalyzer = MoodAnalyzerFactory.createMoodAnalyzer("", "com.moodanalyzer.MoodAnalyzer", String.class);
+            String mood = MoodAnalyzerFactory.settingField(moodAnalyzer, "mesage", "I'm in Happy mood");
+            Assert.assertEquals("Happy", mood);
+        } catch (MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_FIELD, e.type);
+        }
+    }
+
+    @Test
+    public void givenFieldName_WhenNull_ShouldReTurnException() {
+            try {
+                MoodAnalyzer moodAnalyzer = MoodAnalyzerFactory.createMoodAnalyzer("", "com.moodanalyzer.MoodAnalyzer", String.class);
+                String mood = MoodAnalyzerFactory.settingField(moodAnalyzer, "message", null);
+                Assert.assertEquals("Happy", mood);
+            } catch (MoodAnalysisException e){
+                Assert.assertEquals(MoodAnalysisException.ExceptionType.INVOCATION_ISSUE,e.type);
+            }
     }
 }

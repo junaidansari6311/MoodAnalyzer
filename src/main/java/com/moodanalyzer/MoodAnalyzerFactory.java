@@ -1,6 +1,7 @@
 package com.moodanalyzer;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -44,8 +45,22 @@ public class MoodAnalyzerFactory {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
+            throw new MoodAnalysisException(e.getMessage(),MoodAnalysisException.ExceptionType.INVOCATION_ISSUE);
+        }
+        return null;
+    }
+
+    public static String settingField(Object moodAnalyzer, String fieldName, String fieldValue) {
+        try {
+            Field messageField = moodAnalyzer.getClass().getDeclaredField(fieldName);
+            messageField.set(moodAnalyzer,fieldValue);
+            return MoodAnalyzerFactory.methodInvocation("analyseMood",moodAnalyzer);
+        } catch (NoSuchFieldException e) {
+            throw new MoodAnalysisException(e.getMessage(),MoodAnalysisException.ExceptionType.NO_SUCH_FIELD);
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
     }
+
 }
